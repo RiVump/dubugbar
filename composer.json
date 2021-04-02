@@ -14,7 +14,7 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"RiVamp\\Facade\\": "src/"
+			"RiVump\\Facade\\": "src/"
 		}
 	},
 	"require": {
