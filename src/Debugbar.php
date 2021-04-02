@@ -1,6 +1,6 @@
 <?
 
-namespace Ilab\Facade;
+namespace RiVump\Facade;
 
 use DebugBar\DebugBarException;
 use DebugBar\JavascriptRenderer;
