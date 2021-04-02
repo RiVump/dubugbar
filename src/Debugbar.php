@@ -32,9 +32,7 @@ class Debugbar
 
 		if (!isset(self::$instances['debugbar'])) {
 			self::$instances['debugbar'] = new StandardDebugBar();
-			self::$instances['debugbarRenderer'] = self::$instances['debugbar']->getJavascriptRenderer(
-				'/svs/vendor/maximebf/debugbar/src/DebugBar/Resources'
-			);
+			self::$instances['debugbarRenderer'] = self::$instances['debugbar']->getJavascriptRenderer();
 
 			if (Config::get('main.bitrix', false)) {
 				$bitrix_users = Config::get('main.bitrix_users', []);
