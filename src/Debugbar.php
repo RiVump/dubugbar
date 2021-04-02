@@ -102,10 +102,10 @@ class Debugbar
 	}
 
 	/**
-	 * @param string $exception
+	 * @param object $exception
 	 * @throws DebugBarException
 	 */
-	public static function error(string $exception)
+	public static function error(object $exception)
 	{
 		if (self::checkProd()) {
 			self::getInstance('debugbar')['exceptions']->addThrowable($exception);
