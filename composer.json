@@ -1,0 +1,26 @@
+{
+	"name": "rivump/debugbar",
+	"description": "Facade dubugbar for RiVamp",
+	"type": "library",
+	"authors": [
+		{
+			"name": "Роман",
+			"email": "rr@ilab.kz"
+		},
+		{
+			"name": "Владислав",
+			"email": "bv@ilab.kz"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"RiVamp\\Facade\\": "src/"
+		}
+	},
+	"require": {
+		"php": "^7.1",
+		"maximebf/debugbar": "^1.16",
+		"rivump/config": "^1.0"
+	},
+	"license": "MIT"
+}
