@@ -16,8 +16,10 @@ class Debugbar
 {
 	/**
 	 * @var array
+	 * @var null|string
 	 */
 	public static $instances = [];
+	public static $pathToScripts = null;
 
 	/**
 	 * @param string $object
@@ -32,7 +34,9 @@ class Debugbar
 
 		if (!isset(self::$instances['debugbar'])) {
 			self::$instances['debugbar'] = new StandardDebugBar();
-			self::$instances['debugbarRenderer'] = self::$instances['debugbar']->getJavascriptRenderer();
+			self::$instances['debugbarRenderer'] = self::$instances['debugbar']->getJavascriptRenderer(
+				self::$pathToScripts
+			);
 
 			if (Config::get('main.bitrix', false)) {
 				$bitrix_users = Config::get('main.bitrix_users', []);
@@ -60,8 +64,9 @@ class Debugbar
 	/**
 	 * @throws DebugBarException
 	 */
-	public static function start()
+	public static function start($pathToScripts = null)
 	{
+		self::$pathToScripts = $pathToScripts;
 		$pdo = new PDO\TraceablePDO(new \PDO('sqlite::memory:'));
 		self::getInstance('debugbar')->addCollector(new PDO\PDOCollector($pdo));
 
