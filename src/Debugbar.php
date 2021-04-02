@@ -37,20 +37,6 @@ class Debugbar
 			self::$instances['debugbarRenderer'] = self::$instances['debugbar']->getJavascriptRenderer(
 				self::$pathToScripts
 			);
-
-			if (Config::get('main.bitrix', false)) {
-				$bitrix_users = Config::get('main.bitrix_users', []);
-
-				if (is_array($bitrix_users) && !empty($bitrix_users)) {
-					if (in_array(\CUser::GetID())) {
-						self::start();
-					}
-				} elseif (is_array($bitrix_users) && empty($bitrix_users)) {
-					if (\CUser::IsAdmin()) {
-						self::start();
-					}
-				}
-			}
 		}
 
 		return self::$instances[$object];
@@ -67,19 +53,33 @@ class Debugbar
 	public static function start($pathToScripts = null)
 	{
 		self::$pathToScripts = $pathToScripts;
-		$pdo = new PDO\TraceablePDO(new \PDO('sqlite::memory:'));
-		self::getInstance('debugbar')->addCollector(new PDO\PDOCollector($pdo));
+		/*$pdo = new PDO\TraceablePDO(new \PDO('sqlite::memory:'));
+		self::getInstance('debugbar')->addCollector(new PDO\PDOCollector($pdo));*/
 
 		if (Config::get('main.bitrix', false)) {
-			\Bitrix\Main\Page\Asset::addString(self::getInstance('debugbarRenderer')->renderHead());
-			\Bitrix\Main\Page\Asset::addString(
-				self::getInstance('debugbarRenderer')->render(),
-				false,
-				\Bitrix\Main\Page\AssetLocation::BODY_END
-			);
+			$bitrix_users = Config::get('main.bitrix_users', []);
+
+			if (is_array($bitrix_users) && !empty($bitrix_users)) {
+				if (in_array((new \CUser)->GetID(), $bitrix_users)) {
+					self::bitrixInit();
+				}
+			} elseif (is_array($bitrix_users) && empty($bitrix_users)) {
+				if ((new \CUser)->IsAdmin()) {
+					self::bitrixInit();
+				}
+			}		
 		} else {
 			echo self::getInstance('debugbarRenderer')->renderHead();
 		}
+	}
+
+	public static function bitrixInit() {
+		\Bitrix\Main\Page\Asset::getInstance()->addString(self::getInstance('debugbarRenderer')->renderHead());
+		\Bitrix\Main\Page\Asset::getInstance()->addString(
+			self::getInstance('debugbarRenderer')->render(),
+			false,
+			\Bitrix\Main\Page\AssetLocation::BODY_END
+		);
 	}
 
 	/**
