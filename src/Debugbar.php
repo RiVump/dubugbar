@@ -28,9 +28,9 @@ class Debugbar
 	 */
 	public static function getInstance(string $object)
 	{
-		if (self::checkProd()) {
+		/*if (self::checkProd()) {
 			return;
-		}
+		}*/
 
 		if ($object !== 'debugbar' && $object !== 'debugbarRenderer') {
 			return false;
@@ -95,8 +95,9 @@ class Debugbar
 
 	public static function fastInit() {
 		echo self::getInstance('debugbarRenderer')->renderHead();
-		echo '<body>';
-		echo self::getInstance('debugbarRenderer')->render();
+
+		echo '<body style="min-height: 1px">';
+		echo self::getInstance('debugbarRenderer')->renderOnShutdown();
 	}
 
 	/**
@@ -127,7 +128,7 @@ class Debugbar
 	 */
 	public static function error(object $exception)
 	{
-		if (self::checkProd()) {
+		if (!self::checkProd()) {
 			self::getInstance('debugbar')['exceptions']->addThrowable($exception);
 		} else {
 			echo $exception->getMessage();
