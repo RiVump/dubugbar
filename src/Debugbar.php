@@ -62,7 +62,7 @@ class Debugbar
 		
 		self::$pathToScripts = $pathToScripts;
 
-		if(extension_loaded('pdo')) {
+		if(extension_loaded('pdo') && extension_loaded('pdo_sqlite') && extension_loaded('pdo_mysql')) {
 			$pdo = new PDO\TraceablePDO(new \PDO('sqlite::memory:'));
 			self::getInstance('debugbar')->addCollector(new PDO\PDOCollector($pdo));
 		}
