@@ -28,6 +28,10 @@ class Debugbar
 	 */
 	public static function getInstance(string $object)
 	{
+		if (self::checkProd()) {
+			return;
+		}
+
 		if ($object !== 'debugbar' && $object !== 'debugbarRenderer') {
 			return false;
 		}
@@ -52,9 +56,16 @@ class Debugbar
 	 */
 	public static function start($pathToScripts = null)
 	{
+		if (self::checkProd()) {
+			return;
+		}
+		
 		self::$pathToScripts = $pathToScripts;
-		/*$pdo = new PDO\TraceablePDO(new \PDO('sqlite::memory:'));
-		self::getInstance('debugbar')->addCollector(new PDO\PDOCollector($pdo));*/
+
+		if(extension_loaded('pdo')) {
+			$pdo = new PDO\TraceablePDO(new \PDO('sqlite::memory:'));
+			self::getInstance('debugbar')->addCollector(new PDO\PDOCollector($pdo));
+		}
 
 		if (Config::get('main.bitrix', false)) {
 			$bitrix_users = Config::get('main.bitrix_users', []);
@@ -80,6 +91,12 @@ class Debugbar
 			false,
 			\Bitrix\Main\Page\AssetLocation::BODY_END
 		);
+	}
+
+	public static function fastInit() {
+		echo self::getInstance('debugbarRenderer')->renderHead();
+		echo '<body>';
+		echo self::getInstance('debugbarRenderer')->render();
 	}
 
 	/**
