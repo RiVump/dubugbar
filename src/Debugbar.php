@@ -28,9 +28,9 @@ class Debugbar
 	 */
 	public static function getInstance(string $object)
 	{
-		/*if (self::checkProd()) {
+		if (self::checkProd()) {
 			return;
-		}*/
+		}
 
 		if ($object !== 'debugbar' && $object !== 'debugbarRenderer') {
 			return false;
@@ -87,7 +87,7 @@ class Debugbar
 	public static function bitrixInit() {
 		\Bitrix\Main\Page\Asset::getInstance()->addString(self::getInstance('debugbarRenderer')->renderHead());
 		\Bitrix\Main\Page\Asset::getInstance()->addString(
-			self::getInstance('debugbarRenderer')->render(),
+			self::getInstance('debugbarRenderer')->renderOnShutdown(false),
 			false,
 			\Bitrix\Main\Page\AssetLocation::BODY_END
 		);
@@ -97,7 +97,7 @@ class Debugbar
 		echo self::getInstance('debugbarRenderer')->renderHead();
 
 		echo '<body style="min-height: 1px">';
-		echo self::getInstance('debugbarRenderer')->renderOnShutdown();
+		echo self::getInstance('debugbarRenderer')->renderOnShutdown(false);
 	}
 
 	/**
