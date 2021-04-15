@@ -109,11 +109,11 @@ class Debugbar
 	}
 
 	/**
-	 * @param mixed $message
+	 * @param $message
 	 * @param string $label
 	 * @throws DebugBarException
 	 */
-	public static function log(mixed $message, $label = 'info')
+	public static function log($message, $label = 'info')
 	{
 		if (self::checkProd()) {
 			return;
