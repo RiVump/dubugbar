@@ -148,6 +148,10 @@ class Debugbar
 	 */
 	public static function error(object $exception)
 	{
+		if (self::checkProd()) {
+			return;
+		}
+		
 		if (!self::checkProd()) {
 			self::getInstance('debugbar')['exceptions']->addThrowable($exception);
 		} else {
