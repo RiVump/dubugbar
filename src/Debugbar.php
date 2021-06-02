@@ -46,6 +46,9 @@ class Debugbar
 		return self::$instances[$object];
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function checkProd()
 	{
 		return Config::get('main.mode', 'dev') == 'prod';
@@ -84,7 +87,14 @@ class Debugbar
 		}
 	}
 
+	/**
+	 * @throws DebugBarException
+	 */
 	public static function bitrixInit() {
+		if (self::checkProd()) {
+			return;
+		}
+
 		\Bitrix\Main\Page\Asset::getInstance()->addString(self::getInstance('debugbarRenderer')->renderHead());
 		\Bitrix\Main\Page\Asset::getInstance()->addString(
 			self::getInstance('debugbarRenderer')->renderOnShutdown(false),
@@ -92,8 +102,12 @@ class Debugbar
 			\Bitrix\Main\Page\AssetLocation::BODY_END
 		);
 	}
-
+	
 	public static function fastInit() {
+		if (self::checkProd()) {
+			return;
+		}
+
 		echo self::getInstance('debugbarRenderer')->renderHead();
 
 		echo '<body style="min-height: 1px">';
