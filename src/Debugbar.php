@@ -95,12 +95,10 @@ class Debugbar
 			return;
 		}
 
-		\Bitrix\Main\Page\Asset::getInstance()->addString(self::getInstance('debugbarRenderer')->renderHead());
-		\Bitrix\Main\Page\Asset::getInstance()->addString(
-			self::getInstance('debugbarRenderer')->renderOnShutdown(false),
-			false,
-			\Bitrix\Main\Page\AssetLocation::BODY_END
-		);
+		$eventManager = \Bitrix\Main\EventManager::getInstance();
+
+		$eventManager->addEventHandler('main', 'onProlog', ['RiVump\\Facade\\Debugbar', 'renderHead']);
+		$eventManager->addEventHandler('main', 'onEpilog', ['RiVump\\Facade\\Debugbar', 'render']);
 	}
 	
 	public static function fastInit() {
@@ -112,6 +110,14 @@ class Debugbar
 
 		echo '<body style="min-height: 1px">';
 		echo self::getInstance('debugbarRenderer')->renderOnShutdown(false);
+	}
+
+	/**
+	 * @throws DebugBarException
+	 */
+	public static function renderHead()
+	{
+		echo self::getInstance('debugbarRenderer')->renderHead();
 	}
 
 	/**
